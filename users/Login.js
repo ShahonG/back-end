@@ -1,48 +1,46 @@
-const LogRecording = require('../logs/log');
-const util = require('util');
-const md5 = require('md5');
+const router = require("express").Router();
+const passport = require('passport');
 
-module.exports = function(app, dbs){
-    app.get("/Login", function(req, res){
-        res.send(`
-        <html>
-        <body>
-            <form action="/Login" method="POST">
-                Account : <input type="text" name="account">  <br>
-                Password: <input type="text" name="password">
-                <input type="submit" value="Submit">
-    
-            </form>
-            <form action="/SignUp" method="GET">
-                <input type="submit" value="NewAccount">
-            </form>
-        </body>
-        </html>`
-        );
+router.get("/", (req, res) => {
+    res.send(`
+    <html>
+    <body>
+        <form action="/users/Login" method="POST">
+            <div>
+                <label for="account">account</label>
+                <input type="text" id="account "name="account" required>  <br>
+            </div>
+            <div>
+                <label for="password">password</label>
+                <input type="password" id="password "name="password" required>
+            </div>
+            <input type="submit" value="Submit">
+
+        </form>
+        <form action="/users/SignUp" method="GET">
+            <input type="submit" value="NewAccount">
+        </form>
+        <form action="/OAuth2" method="GET">
+            <input type="submit" value="Sign in with Google">
+        </form>
+    </body>
+    </html>`
+    );
+});
+
+router.post("/", passport.authenticate('local', {
+    successRedirect: "/users/Login",
+    failureRedirect: "/users/SignUp",
+    failureFlash: true
+}))
+
+router.get('/OAuth2', 
+    passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+router.get('/OAuth2/callback', 
+    passport.authenticate('google', { failureRedirect : '/Login' }),
+    (req, res) => {
+    res.redirect('/OAuth2/success');
     });
-    
-    app.post("/Login", function(req, res){
-        /*
-        json = {
-            account: "YOUR_ACCOUNT",
-            password: "YOUR_PASSWORD"
-        }
-        */
-        var userInfo = {account: req.body.account, password: req.body.password};
-        dbs.testdb.collection("users").findOne(userInfo, function(err, result){
-            if (err) throw err;
-            if (result == null){
-                // Login Log
-                LogRecording(Date.now(), util.format("Account `%s` Login FAILED.", userInfo.account), "Login", dbs);
-                res.send("Wrong account or password!");
-                console.log("Wrong account or password!");
-            }
-            else{
-                // Login Log
-                LogRecording(Date.now(), util.format("Account `%s` Login SUCCESS.", userInfo.account), "Login", dbs);
-                res.send("Login Success!");
-                console.log("Login Success!");
-            }
-        });
-    });    
-};
+
+module.exports = router;

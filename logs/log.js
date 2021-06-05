@@ -1,3 +1,4 @@
+const logCollection = require('../database/mongodb').log;
 const util = require('util');
 /*
 var markdown = {
@@ -12,9 +13,16 @@ var markdown = {
 };
 */
 
-module.exports = function LogRecording(time, content, type, dbs){
-    dbs.testdb.collection("log").insertOne({time: time, cotent: content, type: type}, function(err, result){
-        if (err) throw err;
-        console.log(util.format("LOG RECORD : [%s] [%s] [%s]", time, content, type));
+module.exports = function LogRecording(time, content, type){
+    logCollection.create({
+        time : time,
+        content : content,
+        type : type
+    }, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(util.format("LOG RECORD : [%s] [%s] [%s]", time, content, type));
+        }
     });
 };
