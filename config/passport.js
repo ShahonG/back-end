@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const LogRecording = require('../logs/log');
 const userCollection = require('../database/mongodb').user;
 const util = require('util');
@@ -10,7 +10,7 @@ function initialize(passport) {
     passport.use(new GoogleStrategy({
         clientID: "616661066353-vi8pngo3m40r7emdmk48ikppf10ej4o7.apps.googleusercontent.com",
         clientSecret: "nrYz8ZAZBHBq5R8S3ybwK82g",
-        callbackURL: "https://localhost:3000/OAuth2/callback"
+        callbackURL: "https://localhost:3000/users/OAuth2/callback"
     }, 
     (accessToken, refreshToken, profile, done) => {
         userProfile = profile;
@@ -22,20 +22,31 @@ function initialize(passport) {
         passwordField: "password",
     },
     (account, password, done) => {
-        const userInfo = { account: account, password: password };
-        console.log(userInfo);
-        userCollection.findOne(userInfo, (err, user) => {
+        const hash = crypto.createHash('sha256').update(password).digest('base64');
+        const reqInfo = { account: account, password: hash };
+        userCollection.findOne(reqInfo, (err, user) => {
             if (err) throw err;
             if (user == null){
+                console.log("Login FAILED, No Account.");
+                LogRecording(   new Date().toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'}),
+                                    util.format("Account '%s' hasn't been create.", reqInfo.account),
+                                    "\x1b[31mUsers\x1b[0m"
+                                );
                 return done(null, false, { message: 'No user with that account' });
             } else {
-                if (password == user.password) {
+                if (reqInfo.password == user.password) {
                     console.log("Login SUCCESS.");
-                    //LogRecording(Date.now(), util.format("Account '%s' Login SUCCESS.", userInfo.account), "Login");
+                    LogRecording(   new Date().toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'}),
+                                    util.format("Account '%s' Login SUCCESS.", reqInfo.account),
+                                    "\x1b[31mUsers\x1b[0m"
+                                );
                     return done(null, user);
                 } else {
                     console.log("Password incorrect.");
-                    //LogRecording(Date.now(), util.format("Wrong PASSWORD for Account '%s'", userInfo.account), "Login");
+                    LogRecording(   new Date().toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'}), 
+                                    util.format("Wrong PASSWORD for Account '%s'", reqInfo.account),
+                                    "\x1b[31mUsers\x1b[0m"
+                                );
                     return done(null, false, { message: 'Password incorrect' });
                 }
             }

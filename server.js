@@ -20,13 +20,14 @@ app.use(session({
 }));
 
 const passport = require('passport');
-const initPassport = require('./users/passport');
+const initPassport = require('./config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
 initPassport(passport);
 
 app.use('/users/Login', require('./users/Login'));
 app.use('/users/SignUp', require('./users/SignUp'));
+app.use('/users/OAuth2', require('./users/OAuth2'));
 
 app.listen(3000);
 

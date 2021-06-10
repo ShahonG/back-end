@@ -5,6 +5,7 @@ router.get("/", (req, res) => {
     res.send(`
     <html>
     <body>
+        <p>Login</p>
         <form action="/users/Login" method="POST">
             <div>
                 <label for="account">account</label>
@@ -20,7 +21,7 @@ router.get("/", (req, res) => {
         <form action="/users/SignUp" method="GET">
             <input type="submit" value="NewAccount">
         </form>
-        <form action="/OAuth2" method="GET">
+        <form action="/users/OAuth2" method="GET">
             <input type="submit" value="Sign in with Google">
         </form>
     </body>
@@ -28,19 +29,11 @@ router.get("/", (req, res) => {
     );
 });
 
+/* local authenticate config in "../config/passport.js" */
 router.post("/", passport.authenticate('local', {
     successRedirect: "/users/Login",
     failureRedirect: "/users/SignUp",
     failureFlash: true
-}))
-
-router.get('/OAuth2', 
-    passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-router.get('/OAuth2/callback', 
-    passport.authenticate('google', { failureRedirect : '/Login' }),
-    (req, res) => {
-    res.redirect('/OAuth2/success');
-    });
+}));
 
 module.exports = router;
