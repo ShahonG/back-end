@@ -3,7 +3,9 @@ const schema = Mongo.Schema;
 
 const userSchema = new schema({
     account: String,
-    password: String
+    password: String,
+    googleID: String,
+    fileList: [ ]
 });
 
 const logSchema = new schema({

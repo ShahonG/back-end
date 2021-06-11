@@ -32,7 +32,7 @@ router.post("/", function(req, res){
                 // User Create Log
                 LogRecording(   new Date().toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'}), 
                                 util.format("New Account %s Created.", userInfo.account), 
-                                "\x1b[31mUsers\x1b[0m"
+                                "\x1b[31mUsers.SignUp\x1b[0m"
                             );
                 console.log("A new account has been created!");
                 res.send("A new account has been created!");
@@ -41,7 +41,7 @@ router.post("/", function(req, res){
             // not null -> account has been used
             LogRecording(   new Date().toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'}), 
                             util.format("Account '%s' has been Created before.", userInfo.account),
-                            "\x1b[31mUsers\x1b[0m"
+                            "\x1b[31mUsers.SignUp\x1b[0m"
                         );
             console.log("Account has been used!");
             res.send("Account has been used!");
