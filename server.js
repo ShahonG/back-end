@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const flash = require('express-flash');
+const cors = require('cors');
 
 const Mongo = require('mongoose');
 const url = "mongodb://127.0.0.1:27017/testdb";
@@ -12,6 +13,8 @@ Mongo.connect(url, (err) => {
 var app = express();
 app.set('view engine', 'ejs');
 app.use(express.urlencoded( { extended: false } ));
+// app.use(bodyParser.json());
+app.use(cors());
 app.use(flash());
 app.use(session({
     resave: false,
