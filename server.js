@@ -1,6 +1,8 @@
 const express = require('express');
 const session = require('express-session');
 const flash = require('express-flash');
+const cors = require('cors');
+const corsOptions = require('./config/cors');
 
 const Mongo = require('mongoose');
 const url = "mongodb://127.0.0.1:27017/testdb";
@@ -25,9 +27,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 initPassport(passport);
 
-app.use('/users/Login', require('./users/Login'));
-app.use('/users/SignUp', require('./users/SignUp'));
-app.use('/users/OAuth2', require('./users/OAuth2'));
+app.use('/users/Login', cors(corsOptions.Login), require('./users/Login'));
+app.use('/users/SignUp', cors(corsOptions.SignUp), require('./users/SignUp'));
+app.use('/users/Google', require('./users/Google'));
 
 app.listen(3000);
 

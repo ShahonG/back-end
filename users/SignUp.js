@@ -21,7 +21,7 @@ router.get("/", function(req, res){
 
 router.post("/", function(req, res){
     const hash = crypto.createHash('sha256').update(req.body.password).digest('base64');
-    console.log(hash);
+    //console.log(hash);
     const userInfo = { account:req.body.account, password: hash };
     userCollection.findOne({ "account" : req.body.account }, (err, user) => {
         if (err) throw err;

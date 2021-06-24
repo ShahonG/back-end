@@ -21,7 +21,7 @@ router.get("/", (req, res) => {
         <form action="/users/SignUp" method="GET">
             <input type="submit" value="NewAccount">
         </form>
-        <form action="/users/OAuth2" method="GET">
+        <form action="/users/Google" method="GET">
             <input type="submit" value="Sign in with Google">
         </form>
     </body>
