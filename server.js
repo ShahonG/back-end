@@ -4,6 +4,7 @@ const flash = require('express-flash');
 const cors = require('cors');
 const corsOptions = require('./config/cors');
 
+// Database part
 const Mongo = require('mongoose');
 const url = "mongodb://127.0.0.1:27017/testdb";
 Mongo.connect(url, (err) => {
@@ -11,6 +12,7 @@ Mongo.connect(url, (err) => {
     console.log("Connect to DB!");
 });
 
+// init express()
 var app = express();
 app.set('view engine', 'ejs');
 app.use(express.urlencoded( { extended: false } ));
@@ -21,16 +23,20 @@ app.use(session({
     secret: 'SECRET'
 }));
 
+// init Passport
 const passport = require('passport');
 const initPassport = require('./config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
 initPassport(passport);
 
+// Services part
 app.use('/users/Login', cors(corsOptions.Login), require('./users/Login'));
 app.use('/users/SignUp', cors(corsOptions.SignUp), require('./users/SignUp'));
 app.use('/users/Google', require('./users/Google'));
 
+// Backup part
+const backup = require('./backup');
 app.listen(3000);
 
 app.get("/", function(req, res){

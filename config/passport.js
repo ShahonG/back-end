@@ -57,7 +57,7 @@ function initialize(passport) {
                 LogRecording(   new Date().toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'}),
                                     util.format("Account '%s' hasn't been create.", reqInfo.account),
                                     "\x1b[31mUsers.Local\x1b[0m"
-                                );
+                            );
                 return done(null, false, { message: 'No user with that account' });
             } else {
                 if (reqInfo.password == user.password) {
