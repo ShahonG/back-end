@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const passport = require('passport');
+const userCollection = require('../database/mongodb').user;
 
 router.get("/", (req, res) => {
     res.send(`
@@ -45,7 +46,8 @@ router.post("/",
             }
 
             if (user) {
-                res.send("Login Success!");
+                console.log(user.fileList);
+                res.send({ "message":"Login Success!", "data":user});
             }
             else {
                 res.send("Login Failed!");
