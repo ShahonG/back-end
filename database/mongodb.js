@@ -5,7 +5,11 @@ const userSchema = new schema({
     account: String,
     password: String,
     googleID: String,
-    fileList: [ ]
+    fileList: [{
+        tags : [],
+        id: { type: String },
+        auth: { type: String },
+    }],
 });
 
 const logSchema = new schema({
@@ -14,19 +18,11 @@ const logSchema = new schema({
     type: String
 });
 
-/*
-const fileSchema = new schema({
-
-});
-*/
-
 const user = Mongo.model('users', userSchema);
 const log  = Mongo.model('log', logSchema);
-//const file = mongo.model('file', fileSchema);
 
 const collection = {
     user : user,
     log  : log,
-    // file : file
 }
 module.exports = collection;

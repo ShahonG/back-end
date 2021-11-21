@@ -53,7 +53,7 @@ function initialize(passport) {
         userCollection.findOne(reqInfo, (err, user) => {
             if (err) throw err;
             if (user == null){
-                console.log("Login FAILED, No Account.");
+                console.log("Login FAILED, No Account.", reqInfo);
                 LogRecording(   new Date().toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'}),
                                     util.format("Account '%s' hasn't been create.", reqInfo.account),
                                     "\x1b[31mUsers.Local\x1b[0m"
@@ -61,7 +61,7 @@ function initialize(passport) {
                 return done(null, false, { message: 'No user with that account' });
             } else {
                 if (reqInfo.password == user.password) {
-                    console.log("Login SUCCESS.");
+                    // console.log("Login SUCCESS.");
                     LogRecording(   new Date().toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'}),
                                     util.format("Account '%s' Login SUCCESS.", reqInfo.account),
                                     "\x1b[31mUsers.Local\x1b[0m"
@@ -82,8 +82,18 @@ function initialize(passport) {
         user serialize to id
         id deserialize to user
     */
-    passport.serializeUser((user, done) => { done(null, user.id); });
-    passport.deserializeUser((id, done) => { done(null, id) });
+    // serialize User for passport.session()
+    passport.serializeUser((user, done) => {
+        // console.log("serializeUser");
+        done(null, user.id);
+    });
+    passport.deserializeUser((id, done) => {
+        // console.log("deserializeUser");
+        userCollection.findById(id, (err, user) => {
+            done(err, user);
+        })
+    });
+
 }
 
 module.exports = initialize;
