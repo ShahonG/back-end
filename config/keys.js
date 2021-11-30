@@ -1,6 +1,6 @@
 module.exports = {
     Google : {
-        ClientID : '616661066353-vi8pngo3m40r7emdmk48ikppf10ej4o7.apps.googleusercontent.com',
-        ClientSecret : 'nrYz8ZAZBHBq5R8S3ybwK82g'
+        ClientID : '417578352473-90ueqki5ddsok1747ukrvog34sbbg28g.apps.googleusercontent.com',
+        ClientSecret : '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'
     }
 }

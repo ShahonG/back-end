@@ -22,6 +22,7 @@
     "express": "^4.17.1",
     "express-flash": "0.0.2",
     "express-session": "^1.17.2",
+    "google-auth-library": "^7.10.2",
     "googleapis": "^74.2.0",
     "md5": "^2.3.0",
     "mongo": "^0.1.0",

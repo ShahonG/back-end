@@ -11,7 +11,8 @@ function initialize(passport) {
     passport.use(new GoogleStrategy({
         clientID: keys.Google.ClientID,
         clientSecret: keys.Google.ClientSecret,
-        callbackURL: "/users/OAuth2/callback"
+        callbackURL: "/users/OAuth2/callback",
+        proxy: true,
     }, 
     (accessToken, refreshToken, profile, done) => {
         const googleInfo = {

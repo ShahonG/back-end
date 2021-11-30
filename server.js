@@ -37,7 +37,7 @@ app.use((req, res, next) => {
     //處理cookie資訊，如果有，並且不對每次請求都新開一個session
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-    res.header('Access-Control-Allow-Headers', 'x-requested-with,content-type');
+    res.header('Access-Control-Allow-Headers', 'x-requested-with,content-type,Authorization');
     next();
 })
 
