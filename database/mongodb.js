@@ -8,7 +8,9 @@ const userSchema = new schema({
     fileList: [{
         tags : [],
         id: { type: String },
-        auth: { type: String },
+        // auth: { type: String },
+        namespace: { type: String},
+        room: { type: String},
     }],
 });
 

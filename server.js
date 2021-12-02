@@ -54,6 +54,7 @@ app.use('/users/SignUp', require('./users/SignUp'));
 app.use('/users/OAuth2', require('./users/OAuth2'));
 app.use('/users/logout', require('./users/logout'));
 app.use('/users/dashboard', require('./users/dashboard'));
+app.use('/query', require('./query'));
 
 app.listen(3003);
 
